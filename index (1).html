@@ -1,0 +1,2664 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>YukBelajar — Fatir Web Maker</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       1. VARIABEL & RESET
+       ============================================================ */
+    :root {
+      --bg: #f6f7fb;
+      --surface: #fff;
+      --surface2: #eef1f8;
+      --text: #182033;
+      --muted: #737d91;
+      --border: #e2e6ef;
+      --primary: #625cf5;
+      --green: #159b72;
+      --danger: #d65d5d;
+      --shadow: 0 12px 35px #202a4610;
+    }
+
+    body.dark {
+      --bg: #0b1020;
+      --surface: #131a2d;
+      --surface2: #1c2540;
+      --text: #edf1ff;
+      --muted: #a1acc4;
+      --border: #29344e;
+      --primary: #8a85ff;
+      --green: #42d6a4;
+      --shadow: 0 12px 35px #0003;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 85px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       2. LAYOUT
+       ============================================================ */
+    .container { width: min(960px, calc(100% - 40px)); margin: auto; }
+    .section { padding: 40px 0 50px; }
+    .section + .section { border-top: 1px solid var(--border); }
+
+    /* ============================================================
+       3. NAVBAR
+       ============================================================ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner { height: 70px; display: flex; align-items: center; gap: 16px; }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 850;
+      white-space: nowrap;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      color: #fff;
+      background: linear-gradient(135deg, #7770ff, #5148dd);
+      flex-shrink: 0;
+      box-shadow: 0 6px 18px -8px rgba(98,92,245,.7);
+    }
+
+    .brand-name {
+      font-family: 'Bricolage Grotesque', 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 21px;
+      letter-spacing: -.6px;
+      line-height: 1.1;
+      display: inline-block;
+      background: linear-gradient(90deg, #625cf5, #817bff, #4b8ee9, #42d6a4, #625cf5);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: brandFlow 6s linear infinite, brandBob 3.5s ease-in-out infinite;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .5px;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 500;
+    }
+
+    @keyframes brandFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    @keyframes brandBob {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-2.5px) rotate(1deg); }
+    }
+
+    .nav-links { display: flex; gap: 16px; margin-left: auto; }
+    .nav-links a, .mobile-menu a { font-size: 13px; font-weight: 700; color: var(--muted); }
+    .nav-links a:hover, .mobile-menu a:hover { color: var(--primary); }
+
+    .nav-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+    .icon-btn {
+      display: grid;
+      place-items: center;
+      width: 41px;
+      height: 41px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      flex-shrink: 0;
+    }
+
+    .menu-btn { display: none; }
+
+    #adminBtn { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    #adminBtn svg { width: 16px; height: 16px; stroke-width: 2; }
+    #adminBtn.admin-active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    .mobile-menu {
+      display: none;
+      padding: 8px 20px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .mobile-menu.open { display: grid; gap: 5px; }
+    .mobile-menu a { padding: 10px; border-radius: 9px; }
+
+    /* ============================================================
+       4. BUTTON & PILL
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 16px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 750;
+      transition: filter .2s;
+    }
+    .btn:hover { filter: brightness(1.08); }
+    .btn.secondary { background: var(--surface); border-color: var(--border); color: var(--text); }
+    .btn.small { padding: 8px 12px; font-size: 12px; }
+
+    .eyebrow, .pill, .level-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 800;
+      background: var(--surface2);
+      color: var(--muted);
+    }
+
+    .eyebrow { color: var(--primary); border: 1px solid #625cf530; background: #625cf510; }
+    .eyebrow span {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green); margin-right: 8px;
+    }
+
+    /* ============================================================
+       5. HERO
+       ============================================================ */
+    .hero { padding: 58px 0 40px; }
+    .hero-grid { display: grid; grid-template-columns: 1fr; gap: 26px; }
+
+    h1 {
+      font-family: 'Bricolage Grotesque', 'Space Grotesk', system-ui, sans-serif;
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1.1;
+      letter-spacing: -2px;
+      margin: 20px 0;
+      font-weight: 800;
+    }
+
+    #heroTitle1 { display: inline-block; animation: heroFloat 4s ease-in-out infinite; }
+    #heroTitle2 { display: inline-block; animation: heroFloat 4s ease-in-out .6s infinite; }
+
+    .gradient {
+      background: linear-gradient(100deg, #817bff, #4b8ee9, #42d6a4, #817bff);
+      background-size: 300% 100%;
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: brandFlow 6s linear infinite;
+    }
+
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .hero p, .section-heading p { color: var(--muted); }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+    .hero-stats { display: flex; flex-wrap: wrap; gap: 25px; margin-top: 28px; }
+    .stat strong { display: block; font-size: 22px; }
+    .stat span { font-size: 11px; color: var(--muted); }
+
+    /* ============================================================
+       6. KARTU UMUM
+       ============================================================ */
+    .hero-card, .panel, .progress-card, .feature, .lesson-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+    .hero-card, .panel, .progress-card { padding: 22px; }
+
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+    .code-preview {
+      margin: 18px 0;
+      padding: 17px;
+      border-radius: 13px;
+      background: #10172a;
+      color: #dce5ff;
+      font: 12px/1.9 ui-monospace, monospace;
+      overflow: auto;
+    }
+
+    .mini-progress, .progress-track {
+      height: 8px;
+      background: var(--surface2);
+      border-radius: 9px;
+      overflow: hidden;
+    }
+    .mini-progress div, .progress-track div {
+      height: 100%; width: 0;
+      background: var(--primary);
+      transition: width .25s;
+    }
+
+    /* ============================================================
+       7. SECTION HEADING
+       ============================================================ */
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .section-heading h2 {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-size: 27px;
+      margin: 5px 0;
+      font-weight: 800;
+      letter-spacing: -.5px;
+    }
+    .section-heading p { font-size: 13px; margin: 0; }
+
+    .kicker {
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 850;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       8. SEARCH & FILTER
+       ============================================================ */
+    .search-wrap { position: relative; width: min(300px, 100%); }
+    .search-wrap input, .field input, .field textarea, .field select {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .filter {
+      padding: 8px 13px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--muted);
+      background: var(--surface);
+      font-size: 12px;
+      font-weight: 750;
+      transition: .2s;
+    }
+    .filter:hover { color: var(--primary); }
+    .filter.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    /* ============================================================
+       9. DAFTAR MATERI
+       ============================================================ */
+    .lesson-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+
+    .lesson-card {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      transition: border-color .2s, transform .2s;
+    }
+    .lesson-card:hover { border-color: var(--primary); transform: translateX(2px); }
+
+    .lesson-icon, .feature-icon {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #625cf514;
+      color: var(--primary);
+    }
+
+    .lesson-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .lesson-info h3 { margin: 0; font-size: 15px; }
+    .lesson-info p { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+
+    .lesson-action { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .lesson-time { font-size: 11px; color: var(--muted); }
+
+    .text-link {
+      border: 0;
+      background: none;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 0;
+    }
+
+    .empty { grid-column: 1 / -1; text-align: center; padding: 35px; color: var(--muted); }
+
+    /* ============================================================
+       10. FITUR
+       ============================================================ */
+    .feature-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .feature {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      align-items: start;
+      gap: 14px;
+      padding: 18px 20px;
+    }
+    .feature h3 { margin: 0 0 3px; font-size: 15px; }
+    .feature p { margin: 0; font-size: 12px; color: var(--muted); }
+
+    /* ============================================================
+       11. PROGRES
+       ============================================================ */
+    .progress-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .progress-track { height: 10px; margin: 16px 0; }
+    .progress-card p { font-size: 12px; color: var(--muted); }
+
+    /* ============================================================
+       12. WORKSPACE & FORM
+       ============================================================ */
+    .workspace { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    .panel h3 { margin: 0 0 5px; font-size: 17px; }
+    .panel > p { font-size: 12px; color: var(--muted); margin: 0 0 15px; }
+
+    .field { display: grid; gap: 6px; margin-bottom: 13px; }
+    .field label { font-size: 12px; font-weight: 750; }
+    .field textarea { min-height: 110px; resize: vertical; }
+
+    .playground textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #10172a;
+      color: #dce5ff;
+      font: 12px/1.7 ui-monospace, monospace;
+    }
+    .playground iframe {
+      width: 100%;
+      height: 240px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-top: 12px;
+    }
+
+    /* ============================================================
+       13. CATATAN
+       ============================================================ */
+    .note-list { display: grid; gap: 8px; margin-top: 12px; }
+    .note-item {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+    .note-item button {
+      float: right;
+      color: var(--danger);
+      border: 0;
+      background: none;
+      font-size: 11px;
+    }
+
+    /* ============================================================
+       14. IKLAN (7 slot)
+       ============================================================ */
+    .ad-section { margin: 10px 0; padding: 0; }
+
+    .ad-banner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding: 18px 22px;
+      margin: 18px auto;
+      border-radius: 16px;
+      color: #fff;
+      isolation: isolate;
+      overflow: hidden;
+      box-shadow: 0 18px 40px -18px rgba(98, 92, 245, .55);
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      transition: filter .3s ease;
+    }
+    .ad-banner:last-child { margin-bottom: 0; }
+    .ad-banner:hover { filter: brightness(1.06) saturate(1.1); }
+
+    .ad-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background: linear-gradient(120deg, #625cf5 0%, #817bff 25%, #4b8ee9 50%, #42d6a4 75%, #625cf5 100%);
+      background-size: 300% 300%;
+      animation: adGradient 8s ease infinite;
+    }
+
+    .ad-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.38) 50%, transparent 60%);
+      transform: translateX(-100%);
+      animation: adShine 4.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .ad-banner .ad-label {
+      position: absolute;
+      top: 0;
+      left: 20px;
+      z-index: 3;
+      padding: 4px 10px;
+      font-size: 9.5px;
+      font-weight: 900;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(11, 16, 32, .78);
+      border-radius: 0 0 10px 10px;
+      backdrop-filter: blur(6px);
+    }
+
+    .ad-banner .ad-body { position: relative; z-index: 2; flex: 1; min-width: 180px; }
+
+    .ad-banner h4 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 850;
+      letter-spacing: -.3px;
+      line-height: 1.25;
+      color: #fff;
+      text-shadow: 0 2px 14px rgba(0,0,0,.3);
+    }
+
+    .ad-banner p {
+      margin: 4px 0 0;
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: .25px;
+      color: #f0f3ff;
+      opacity: .92;
+    }
+
+    .ad-banner .ad-cta {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 11px 18px;
+      border: 0;
+      border-radius: 10px;
+      background: #fff;
+      color: #4b4ccc;
+      font-size: 12.5px;
+      font-weight: 850;
+      letter-spacing: .3px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px -6px rgba(0,0,0,.35);
+      transition: color .3s ease, transform .25s ease, box-shadow .25s ease;
+    }
+
+    .ad-banner .ad-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(120deg, #625cf5, #4b8ee9);
+      transform: translateX(-101%);
+      transition: transform .4s ease;
+    }
+
+    .ad-banner .ad-cta:hover {
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -6px rgba(0,0,0,.5);
+    }
+    .ad-banner .ad-cta:hover::before { transform: translateX(0); }
+
+    @keyframes adGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    @keyframes adShine {
+      0% { transform: translateX(-100%); }
+      60%, 100% { transform: translateX(100%); }
+    }
+    @keyframes adFloat {
+      0%, 100% { translate: 0 0; }
+      50% { translate: 0 -5px; }
+    }
+    @keyframes adPulse {
+      0%, 100% { scale: 1; box-shadow: 0 18px 40px -18px rgba(98,92,245,.55); }
+      50% { scale: 1.008; box-shadow: 0 24px 50px -18px rgba(98,92,245,.8); }
+    }
+    @keyframes adSway {
+      0%, 100% { translate: 0 0; }
+      33% { translate: -3px 0; }
+      66% { translate: 3px 0; }
+    }
+    @keyframes adBreathe {
+      0%, 100% { opacity: 1; scale: 1; }
+      50% { opacity: .92; scale: 1.012; }
+    }
+    @keyframes adGlide {
+      0%, 100% { translate: 0 0; }
+      25% { translate: 3px 0; }
+      75% { translate: -3px 0; }
+    }
+    @keyframes adTilt {
+      0%, 100% { rotate: 0deg; }
+      50% { rotate: .8deg; }
+    }
+
+    .ad-slot-atas             { animation: adFloat  6s   ease-in-out infinite; }
+    .ad-slot-after-materi     { animation: adPulse  5s   ease-in-out infinite; }
+    .ad-slot-tengah           { animation: adSway   7s   ease-in-out infinite; }
+    .ad-slot-after-kreasi     { animation: adBreathe 8s  ease-in-out infinite; }
+    .ad-slot-after-playground { animation: adGlide  6.5s ease-in-out infinite; }
+    .ad-slot-after-catatan    { animation: adTilt   7s   ease-in-out infinite; }
+    .ad-slot-bawah            { animation: adSway   8s   ease-in-out infinite; }
+
+    .ad-slot-tengah::after,
+    .ad-slot-after-kreasi::after { animation-duration: 3.2s; }
+    .ad-slot-bawah::before,
+    .ad-slot-after-playground::before { animation-duration: 6s; }
+
+    @media (max-width: 700px) {
+      .ad-banner { padding: 16px 18px; margin: 14px 0; gap: 12px; }
+      .ad-banner h4 { font-size: 15px; }
+      .ad-banner p { font-size: 12px; }
+      .ad-banner .ad-cta { width: 100%; justify-content: center; }
+    }
+
+    /* ============================================================
+       15. UPLOAD KREASI
+       ============================================================ */
+    .upload-list { display: grid; gap: 10px; margin-top: 14px; }
+    .upload-card {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+    }
+    .upload-card h4 { margin: 0; font-size: 14px; }
+    .upload-meta { font-size: 11px; color: var(--muted); margin: 2px 0 6px; }
+    .upload-desc { font-size: 12px; color: var(--muted); margin: 0 0 10px; }
+    .upload-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* ============================================================
+       16. ADMIN PANEL
+       ============================================================ */
+    .admin-tabs {
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid var(--border);
+      margin: 16px 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .admin-tab {
+      padding: 9px 12px;
+      border: 0;
+      background: none;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .admin-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .admin-tab-content { display: none; }
+    .admin-tab-content.active { display: block; }
+
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .admin-stats > div {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-align: center;
+      background: var(--bg);
+    }
+    .admin-stats strong { display: block; font-size: 20px; }
+    .admin-stats span { font-size: 11px; color: var(--muted); }
+
+    .admin-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      background: var(--bg);
+      flex-wrap: wrap;
+    }
+    .admin-row > div:first-child { flex: 1; min-width: 120px; }
+    .admin-row strong { font-size: 13px; }
+    .admin-row .small-muted { font-size: 11px; color: var(--muted); }
+    .admin-empty {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      padding: 14px;
+    }
+
+    /* ============================================================
+       17. FOOTER
+       ============================================================ */
+    .footer { border-top: 1px solid var(--border); padding: 25px 0; margin-top: 20px; }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .footer p { font-size: 11px; color: var(--muted); }
+
+    /* ============================================================
+       18. MODAL & TOAST
+       ============================================================ */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: #050816b8;
+      padding: 18px;
+      overflow: auto;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.open { display: flex; }
+
+    .modal-content {
+      width: min(720px, 100%);
+      max-height: 92vh;
+      overflow: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+    }
+    .modal-content.wide { width: min(820px, 100%); }
+    .modal-content.narrow { width: min(420px, 100%); }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: flex-start;
+    }
+    .modal-header h2 {
+      margin: 6px 0;
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-weight: 800;
+      letter-spacing: -.5px;
+    }
+    .modal-body { font-size: 14px; }
+    .modal-body pre {
+      padding: 15px;
+      background: #10172a;
+      color: #dce5ff;
+      border-radius: 12px;
+      overflow: auto;
+      font-size: 12px;
+    }
+
+    .modal-actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 20px; }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translate(-50%, 15px);
+      opacity: 0;
+      z-index: 30;
+      background: var(--text);
+      color: var(--surface);
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-size: 12px;
+      pointer-events: none;
+      transition: .2s;
+      max-width: calc(100% - 40px);
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    /* ============================================================
+       19. MUSIC PLAYER (+ fallback embed)
+       ============================================================ */
+    .music-player {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 25;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 20px 50px -12px rgba(0,0,0,.35);
+      width: 340px;
+      max-width: calc(100% - 30px);
+      overflow: hidden;
+      transition: width .3s ease;
+      font-size: 13px;
+    }
+
+    .music-player[hidden] { display: none !important; }
+
+    .music-player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: linear-gradient(120deg, #625cf5, #4b8ee9);
+      color: #fff;
+      font-weight: 750;
+      gap: 8px;
+    }
+
+    .music-player-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex: 1;
+    }
+    .music-player-title span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .music-player-toggle {
+      background: rgba(255,255,255,.2);
+      border: 0;
+      color: #fff;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1;
+      flex-shrink: 0;
+      transition: background .2s;
+    }
+    .music-player-toggle:hover { background: rgba(255,255,255,.35); }
+
+    .music-player-body { padding: 10px; }
+
+    /* Perubahan: hapus overflow hidden agar fallback tampil utuh */
+    .music-player-track {
+      border-radius: 10px;
+      min-height: 80px;
+      background: var(--bg);
+    }
+
+    .music-player-track iframe {
+      display: block;
+      width: 100%;
+      height: 152px;
+      border: 0;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .music-player-track audio {
+      display: block;
+      width: 100%;
+      height: 44px;
+      margin: 0;
+    }
+
+    /* ========== FALLBACK EMPAT ========== */
+    .mp-fallback {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      padding: 8px;
+      background: var(--surface2);
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .mp-fallback .mp-warning {
+      flex: 1 1 100%;
+      margin: 0 0 4px;
+      padding: 6px 8px;
+      font-size: 10.5px;
+      line-height: 1.4;
+      color: #8a6d00;
+      background: #fff4cc;
+      border-radius: 6px;
+    }
+
+    body.dark .mp-fallback .mp-warning {
+      color: #ffd97a;
+      background: #4a3a00;
+    }
+
+    .mp-fallback .mp-warning code {
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      padding: 1px 4px;
+      background: rgba(0,0,0,.12);
+      border-radius: 3px;
+    }
+
+    .mp-fallback a,
+    .mp-fallback button {
+      flex: 1;
+      text-align: center;
+      padding: 5px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 700;
+      transition: .2s;
+      cursor: pointer;
+    }
+
+    .mp-fallback a:hover,
+    .mp-fallback button:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .music-player-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .music-player-controls button {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      color: var(--text);
+      font-weight: 700;
+      transition: opacity .2s;
+    }
+    .music-player-controls button:hover:not(:disabled) { background: var(--primary); color: #fff; }
+
+    #mpCounter {
+      font-size: 11px;
+      color: var(--muted);
+      min-width: 48px;
+      text-align: center;
+    }
+
+    .music-player.minimized { width: 220px; }
+    .music-player.minimized .music-player-body { display: none; }
+
+    @media (max-width: 700px) {
+      .music-player { width: 280px; right: 15px; bottom: 15px; }
+      .music-player.minimized { width: 180px; }
+    }
+
+    /* ============================================================
+       20. RESPONSIVE
+       ============================================================ */
+    @media (max-width: 900px) {
+      .nav-links { gap: 12px; }
+      .nav-links a { font-size: 12px; }
+    }
+
+    @media (max-width: 700px) {
+      .container { width: calc(100% - 30px); }
+      .nav-inner { height: 64px; gap: 8px; }
+
+      .nav-links, .desktop-cta { display: none; }
+      .menu-btn { display: grid; }
+
+      #adminBtn {
+        width: 41px;
+        height: 41px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 12px;
+      }
+      #adminBtnText { display: none; }
+      #adminBtn svg { width: 19px; height: 19px; }
+
+      .brand-name { font-size: 18px; }
+
+      .hero { padding: 35px 0 25px; }
+      h1 { font-size: 34px; letter-spacing: -1.3px; }
+      .hero p { font-size: 14px; }
+
+      .section { padding: 30px 0 40px; }
+      .section-heading { flex-direction: column; align-items: stretch; }
+      .section-heading h2 { font-size: 23px; }
+      .search-wrap { width: 100%; }
+
+      .lesson-card { grid-template-columns: 44px 1fr; }
+      .lesson-action {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--border);
+        padding-top: 10px;
+      }
+
+      .panel, .hero-card { padding: 17px; }
+
+      .modal { padding: 8px; }
+      .modal-content { padding: 17px; max-height: 95vh; }
+
+      .modal-content.wide { padding: 14px; }
+      .admin-tab { padding: 8px 10px; font-size: 11px; }
+      .admin-row { padding: 8px 10px; }
+      .admin-stats { gap: 6px; }
+      .admin-stats > div { padding: 8px; }
+      .admin-stats strong { font-size: 17px; }
+      .modal-header h2 { font-size: 20px; }
+    }
+
+    @media (max-width: 380px) {
+      .brand > span:last-child { display: none; }
+      .brand-mark { width: 36px; height: 36px; border-radius: 11px; }
+      #adminBtn, #themeBtn, .menu-btn { width: 38px; height: 38px; }
+      .nav-inner { gap: 6px; }
+      .nav-actions { gap: 6px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+      }
+      .brand-name {
+        background: linear-gradient(90deg, #625cf5, #817bff);
+        -webkit-background-clip: text;
+        background-clip: text;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="#beranda">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24"><path d="m8 8-4 4 4 4m8-8 4 4-4 4m-2-11-4 14"/></svg>
+        </span>
+        <span>
+          <span class="brand-name">YukBelajar</span>
+          <small class="brand-sub">FATIR WEB MAKER</small>
+        </span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#beranda">Beranda</a>
+        <a href="#materi">Materi</a>
+        <a href="#kreasi">Kreasi</a>
+        <a href="#latihan">Playground</a>
+        <a href="#catatan">Catatan</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeBtn" aria-label="Ganti tema">
+          <svg id="themeIcon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5M5 19l1.5-1.5"/>
+          </svg>
+        </button>
+
+        <button class="btn secondary small" id="adminBtn" title="Login Admin" aria-label="Login Admin">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span id="adminBtnText">Login Admin</span>
+        </button>
+
+        <a class="btn desktop-cta" href="#materi">Mulai belajar →</a>
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Buka menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <nav class="mobile-menu" id="mobileMenu">
+      <a href="#beranda">Beranda</a>
+      <a href="#materi">Materi belajar</a>
+      <a href="#kreasi">Kreasi komunitas</a>
+      <a href="#latihan">Playground HTML</a>
+      <a href="#catatan">Catatan pribadi</a>
+      <a href="#laporan">Laporkan masalah</a>
+      <a href="#" id="mobileAdminBtn">Login Admin</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero" id="beranda">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow"><span></span> RUANG BELAJAR WEB DEVELOPMENT</div>
+          <h1>
+            <span id="heroTitle1">Bangun skill web.</span><br>
+            <span class="gradient" id="heroTitle2">Mulai dari nol.</span>
+          </h1>
+          <p id="heroDesc">Belajar HTML, CSS, JavaScript, sampai konsep pengembangan web tingkat lanjut. Materi bertahap, contoh kode, dan latihan yang bisa langsung dicoba.</p>
+          <div class="hero-actions">
+            <a class="btn" href="#materi">Jelajahi materi →</a>
+            <a class="btn secondary" href="#latihan">Coba playground</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><strong id="statLessons">17</strong><span>Materi belajar</span></div>
+            <div class="stat"><strong>4</strong><span>Tingkat keahlian</span></div>
+            <div class="stat"><strong id="statDone">0</strong><span>Materi selesai</span></div>
+          </div>
+        </div>
+
+        <aside class="hero-card">
+          <div class="card-top">
+            <strong>Contoh kode pertama</strong>
+            <span class="pill">HTML</span>
+          </div>
+          <div class="code-preview">&lt;!DOCTYPE html&gt;<br>&lt;html lang="id"&gt;<br>&nbsp;&nbsp;&lt;body&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;Halo, dunia!&lt;/h1&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Web pertamaku.&lt;/p&gt;<br>&nbsp;&nbsp;&lt;/body&gt;<br>&lt;/html&gt;</div>
+          <div class="card-top">
+            <span style="font-size:12px;color:var(--muted)">Progres belajar kamu</span>
+            <strong id="heroPercent">0%</strong>
+          </div>
+          <div class="mini-progress"><div id="heroProgress"></div></div>
+          <p style="font-size:11px;margin-bottom:0">Progres disimpan di browser ini.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="ad-section"><div class="container" id="adsTop"></div></section>
+
+    <section class="section" id="materi">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="kicker">Learning path</div>
+            <h2>Jelajahi materi</h2>
+            <p>Pilih topik, pelajari konsep, lalu praktikkan.</p>
+          </div>
+          <div class="search-wrap">
+            <input type="search" id="searchInput" placeholder="Cari materi..." aria-label="Cari materi">
+          </div>
+        </div>
+        <div class="filters" id="filters">
+          <button class="filter active" data-level="Semua">Semua materi</button>
+          <button class="filter" data-level="Pemula">01 · Pemula</button>
+          <button class="filter" data-level="Junior">02 · Junior</button>
+          <button class="filter" data-level="Senior">03 · Senior</button>
+          <button class="filter" data-level="Profesional">04 · Profesional</button>
+        </div>
+        <div class="lesson-grid" id="lessonGrid"></div>
+      </div>
+    </section>
+
+    <section class="ad-section"><div class="container" id="adsAfterMateri"></div></section>
+
+    <section class="section" id="progres">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="kicker">Your journey</div>
+            <h2>Progres belajar</h2>
+            <p>Pantau materi yang sudah kamu selesaikan.</p>
+          </div>
+        </div>
+        <div class="progress-card">
+          <div class="progress-head">
+            <div>
+              <span style="font-size:12px;color:var(--muted)">Total penyelesaian</span>
+              <div><strong id="progressCount">0 / 17</strong></div>
+            </div>
+            <strong id="progressPercent">0%</strong>
+          </div>
+          <div class="progress-track"><div id="progressBar"></div></div>
+          <p id="progressMessage">Mulai dari materi pertama untuk membangun kebiasaan belajar.</p>
+          <button class="btn secondary small" id="resetProgress">Reset progres</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="kicker">Built for practice</div>
+            <h2>Belajar dengan cara yang tepat</h2>
+            <p>Belajar konsep, praktik mandiri, dan evaluasi pemahaman.</p>
+          </div>
+        </div>
+        <div class="feature-grid">
+          <article class="feature">
+            <div class="feature-icon">&lt;/&gt;</div>
+            <div><h3>Contoh kode</h3><p>Pelajari pola penulisan kode melalui contoh yang ringkas.</p></div>
+          </article>
+          <article class="feature">
+            <div class="feature-icon">✓</div>
+            <div><h3>Progres tersimpan</h3><p>Status materi dan catatan disimpan secara lokal.</p></div>
+          </article>
+          <article class="feature">
+            <div class="feature-icon">▣</div>
+            <div><h3>Praktik langsung</h3><p>Gunakan playground untuk mencoba HTML dan melihat hasilnya.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-section"><div class="container" id="adsMid"></div></section>
+
+    <section class="section" id="kreasi">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="kicker">Community</div>
+            <h2>Kreasi komunitas</h2>
+            <p>Bagikan kode kreasi kamu, atau lihat karya orang lain.</p>
+          </div>
+        </div>
+        <div class="workspace">
+          <div class="panel">
+            <h3>Bagikan kreasi kamu</h3>
+            <p>Kode akan langsung ditampilkan di galeri dan bisa dipakai orang lain.</p>
+            <form id="uploadForm">
+              <div class="field">
+                <label for="upTitle">Judul kreasi</label>
+                <input id="upTitle" required placeholder="Contoh: Kartu profil sederhana">
+              </div>
+              <div class="field">
+                <label for="upAuthor">Nama kamu</label>
+                <input id="upAuthor" required placeholder="Nama atau nickname">
+              </div>
+              <div class="field">
+                <label for="upDesc">Deskripsi singkat</label>
+                <textarea id="upDesc" required placeholder="Jelaskan apa yang kamu buat..."></textarea>
+              </div>
+              <div class="field">
+                <label for="upCode">Kode HTML</label>
+                <textarea id="upCode" required spellcheck="false"
+                  style="min-height:180px;font-family:ui-monospace,monospace;font-size:12px"
+                  placeholder="&lt;!DOCTYPE html&gt;&#10;&lt;html&gt;...&lt;/html&gt;"></textarea>
+              </div>
+              <button class="btn" type="submit">Bagikan kreasi →</button>
+            </form>
+          </div>
+          <div class="panel">
+            <h3>Galeri kreasi</h3>
+            <p id="uploadCount">Belum ada kreasi.</p>
+            <div id="uploadList" class="upload-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-section"><div class="container" id="adsAfterKreasi"></div></section>
+
+    <section class="section" id="latihan">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="kicker">Code playground</div>
+            <h2>Eksperimen kode</h2>
+            <p>Tulis HTML, lalu lihat hasilnya langsung di bawah.</p>
+          </div>
+        </div>
+        <div class="workspace">
+          <div class="panel playground">
+            <h3>Editor HTML</h3>
+            <p>Jalankan kode untuk melihat hasilnya.</p>
+            <textarea id="playCode" spellcheck="false" aria-label="Editor kode HTML"><!DOCTYPE html>
+<html lang="id">
+<head>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    h1 { color: #625cf5; }
+    button { padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Halo, dunia!</h1>
+  <p>Ini halaman web pertamaku.</p>
+  <button onclick="alert('Berhasil!')">Klik saya</button>
+</body>
+</html></textarea>
+            <button class="btn" id="runCode" style="margin-top:12px">Jalankan kode →</button>
+          </div>
+          <div class="panel">
+            <h3>Pratinjau hasil</h3>
+            <p>Output ditampilkan di area terpisah.</p>
+            <iframe id="preview" title="Pratinjau HTML" sandbox="allow-scripts"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-section"><div class="container" id="adsAfterPlayground"></div></section>
+
+    <section class="section" id="catatan">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="kicker">Personal workspace</div>
+            <h2>Catatan belajar</h2>
+            <p>Simpan rangkuman atau hal yang ingin dipelajari lagi.</p>
+          </div>
+        </div>
+        <div class="workspace">
+          <div class="panel">
+            <h3>Tulis catatan baru</h3>
+            <div class="field">
+              <label for="noteTitle">Judul catatan</label>
+              <input id="noteTitle" placeholder="Contoh: Memahami flexbox">
+            </div>
+            <div class="field">
+              <label for="noteText">Isi catatan</label>
+              <textarea id="noteText" placeholder="Tulis hal penting yang kamu pelajari..."></textarea>
+            </div>
+            <button class="btn" id="saveNote">Simpan catatan</button>
+          </div>
+          <div class="panel">
+            <h3>Catatan tersimpan</h3>
+            <p id="noteCount">Belum ada catatan.</p>
+            <div class="note-list" id="noteList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-section"><div class="container" id="adsAfterCatatan"></div></section>
+
+    <section class="section" id="laporan">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="kicker">Feedback</div>
+            <h2>Laporkan masalah</h2>
+            <p>Kirim saran atau laporkan kesalahan pada materi.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <form id="reportForm">
+            <div class="field">
+              <label for="reportType">Jenis laporan</label>
+              <select id="reportType">
+                <option>Bug atau kesalahan</option>
+                <option>Saran fitur</option>
+                <option>Materi kurang jelas</option>
+                <option>Lainnya</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="reportEmail">Email kamu (opsional)</label>
+              <input type="email" id="reportEmail" placeholder="nama@email.com">
+            </div>
+            <div class="field">
+              <label for="reportMessage">Detail laporan</label>
+              <textarea id="reportMessage" required placeholder="Jelaskan masalah atau saran kamu..."></textarea>
+            </div>
+            <button class="btn" type="submit">Siapkan laporan</button>
+            <p style="font-size:11px;color:var(--muted)">Form ini membuka aplikasi email. Pengiriman otomatis memerlukan konfigurasi layanan email.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-section"><div class="container" id="adsBottom"></div></section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a class="brand" href="#beranda">
+        <span class="brand-mark">&lt;/&gt;</span>
+        <span>
+          <span class="brand-name">YukBelajar</span>
+          <small class="brand-sub">FATIR WEB MAKER</small>
+        </span>
+      </a>
+      <p>Belajar sedikit demi sedikit, berkembang setiap hari.</p>
+      <p>© <span id="year"></span> Fatir Web Maker</p>
+    </div>
+  </footer>
+
+  <div class="music-player" id="musicPlayer" hidden>
+    <div class="music-player-header">
+      <div class="music-player-title">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <span id="mpTitle">Musik</span>
+      </div>
+      <button class="music-player-toggle" id="mpToggle" aria-label="Minimize">−</button>
+    </div>
+    <div class="music-player-body" id="mpBody">
+      <div class="music-player-track" id="mpTrack"></div>
+      <div class="music-player-controls" id="mpControls">
+        <button id="mpPrev" aria-label="Sebelumnya">⏮</button>
+        <span id="mpCounter">1 / 1</span>
+        <button id="mpNext" aria-label="Berikutnya">⏭</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="lessonModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div class="kicker" id="modalLevel">MATERI</div>
+          <h2 id="modalTitle">Judul materi</h2>
+          <p id="modalMeta"></p>
+        </div>
+        <button class="icon-btn" data-close="lessonModal" aria-label="Tutup materi">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-actions">
+        <button class="btn" id="completeLesson">Tandai selesai</button>
+        <button class="btn secondary" id="copyLessonCode">Salin contoh kode</button>
+        <button class="btn secondary" data-close="lessonModal">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="adminLoginModal" role="dialog" aria-modal="true">
+    <div class="modal-content narrow">
+      <div class="modal-header">
+        <div>
+          <div class="kicker">Admin</div>
+          <h2>Login Admin</h2>
+        </div>
+        <button class="icon-btn" data-close="adminLoginModal" aria-label="Tutup">×</button>
+      </div>
+      <form id="adminLoginForm" style="margin-top:16px">
+        <div class="field">
+          <label for="adminUser">Username</label>
+          <input id="adminUser" required autocomplete="username" placeholder="Masukkan username">
+        </div>
+        <div class="field">
+          <label for="adminPass">Password</label>
+          <input id="adminPass" type="password" required autocomplete="current-password" placeholder="Masukkan password">
+        </div>
+        <button class="btn" type="submit" style="width:100%">Masuk</button>
+        <p id="adminLoginMsg" style="font-size:12px;color:var(--danger);margin:10px 0 0"></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="adminPanelModal" role="dialog" aria-modal="true">
+    <div class="modal-content wide">
+      <div class="modal-header">
+        <div>
+          <div class="kicker">Admin Panel</div>
+          <h2>Kelola situs</h2>
+          <p id="adminWelcome" style="font-size:12px;color:var(--muted);margin:4px 0 0"></p>
+        </div>
+        <div style="display:flex;gap:6px;align-items:flex-start;flex-shrink:0">
+          <button class="btn secondary small" id="adminLogout">Logout</button>
+          <button class="icon-btn" data-close="adminPanelModal" aria-label="Tutup">×</button>
+        </div>
+      </div>
+
+      <div class="admin-stats">
+        <div><strong id="adminStatUploads">0</strong><span>Kreasi</span></div>
+        <div><strong id="adminStatAds">0</strong><span>Iklan aktif</span></div>
+        <div><strong id="adminStatMusic">0</strong><span>Musik aktif</span></div>
+        <div><strong id="adminStatNotes">0</strong><span>Catatan</span></div>
+        <div><strong id="adminStatDone">0</strong><span>Materi selesai</span></div>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="ads">Iklan</button>
+        <button class="admin-tab" data-tab="music">Musik</button>
+        <button class="admin-tab" data-tab="uploads">Kreasi</button>
+        <button class="admin-tab" data-tab="site">Pengaturan</button>
+        <button class="admin-tab" data-tab="danger">Reset</button>
+      </div>
+
+      <div id="tabAds" class="admin-tab-content active">
+        <h3>Tambah iklan</h3>
+        <form id="adForm">
+          <div class="field"><label for="adTitle">Judul iklan</label><input id="adTitle" required placeholder="Contoh: Kursus Web Gratis"></div>
+          <div class="field"><label for="adDesc">Deskripsi (opsional)</label><input id="adDesc" placeholder="Belajar dari nol sampai mahir"></div>
+          <div class="field"><label for="adLink">URL tujuan (opsional)</label><input id="adLink" type="url" placeholder="https://contoh.com"></div>
+          <div class="field"><label for="adCta">Teks tombol</label><input id="adCta" value="Kunjungi"></div>
+          <div class="field">
+            <label for="adSlot">Posisi iklan (7 slot)</label>
+            <select id="adSlot">
+              <option value="atas">1 · Atas (setelah hero)</option>
+              <option value="after-materi">2 · Setelah materi</option>
+              <option value="tengah">3 · Tengah (setelah fitur)</option>
+              <option value="after-kreasi">4 · Setelah kreasi</option>
+              <option value="after-playground">5 · Setelah playground</option>
+              <option value="after-catatan">6 · Setelah catatan</option>
+              <option value="bawah">7 · Bawah (sebelum footer)</option>
+            </select>
+          </div>
+          <button class="btn" type="submit">Tambah iklan</button>
+        </form>
+        <h3 style="margin-top:22px">Daftar iklan</h3>
+        <div id="adminAdsList"></div>
+      </div>
+
+      <div id="tabMusic" class="admin-tab-content">
+        <h3>Tambah musik</h3>
+        <p style="font-size:12px;color:var(--muted)">Musik akan tampil di player mengambang di pojok kanan bawah. Mendukung YouTube, Spotify, dan file MP3.</p>
+        <form id="musicForm">
+          <div class="field">
+            <label for="musicType">Sumber musik</label>
+            <select id="musicType">
+              <option value="youtube">YouTube</option>
+              <option value="spotify">Spotify</option>
+              <option value="mp3">File MP3 (URL)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="musicInput">URL atau ID</label>
+            <input id="musicInput" required placeholder="https://youtube.com/watch?v=...">
+            <small style="font-size:11px;color:var(--muted)">
+              YouTube: URL atau ID video · Spotify: URL track/album/playlist · MP3: URL file .mp3
+            </small>
+          </div>
+          <div class="field">
+            <label for="musicTitle">Judul (opsional)</label>
+            <input id="musicTitle" placeholder="Judul lagu">
+          </div>
+          <button class="btn" type="submit">Tambah musik</button>
+        </form>
+        <h3 style="margin-top:22px">Daftar musik</h3>
+        <div id="adminMusicList"></div>
+      </div>
+
+      <div id="tabUploads" class="admin-tab-content">
+        <h3>Kreasi komunitas</h3>
+        <p style="font-size:12px;color:var(--muted)">Hapus kreasi yang tidak pantas atau melanggar.</p>
+        <div id="adminUploadsList" style="margin-top:14px"></div>
+      </div>
+
+      <div id="tabSite" class="admin-tab-content">
+        <h3>Pengaturan situs</h3>
+        <p style="font-size:12px;color:var(--muted)">Ubah branding dan teks hero.</p>
+        <form id="siteForm" style="margin-top:14px">
+          <div class="field"><label for="siteName">Nama situs (brand)</label><input id="siteName"></div>
+          <div class="field"><label for="siteSub">Subjudul brand</label><input id="siteSub"></div>
+          <div class="field"><label for="siteHero1">Judul hero baris 1</label><input id="siteHero1"></div>
+          <div class="field"><label for="siteHero2">Judul hero baris 2</label><input id="siteHero2"></div>
+          <div class="field"><label for="siteHeroDesc">Deskripsi hero</label><textarea id="siteHeroDesc" style="min-height:80px"></textarea></div>
+          <button class="btn" type="submit">Simpan pengaturan</button>
+        </form>
+      </div>
+
+      <div id="tabDanger" class="admin-tab-content">
+        <h3>Reset data</h3>
+        <p style="font-size:12px;color:var(--muted)">Hapus data tertentu. Tindakan tidak bisa dibatalkan.</p>
+        <div style="display:grid;gap:8px;margin-top:14px">
+          <button class="btn secondary" data-reset="uploads">Hapus semua kreasi</button>
+          <button class="btn secondary" data-reset="ads">Hapus semua iklan</button>
+          <button class="btn secondary" data-reset="music">Hapus semua musik</button>
+          <button class="btn secondary" data-reset="notes">Hapus semua catatan</button>
+          <button class="btn secondary" data-reset="progress">Reset progres belajar</button>
+          <button class="btn secondary" data-reset="all" style="color:var(--danger)">Reset SEMUA data</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal" id="uploadViewModal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div class="kicker" id="upViewAuthor">KREASI</div>
+          <h2 id="upViewTitle"></h2>
+          <p id="upViewDesc" style="font-size:12px;color:var(--muted);margin:0"></p>
+        </div>
+        <button class="icon-btn" data-close="uploadViewModal" aria-label="Tutup">×</button>
+      </div>
+      <h3 style="margin-bottom:6px">Pratinjau</h3>
+      <iframe id="upViewPreview" sandbox="allow-scripts" title="Pratinjau kreasi"
+        style="width:100%;height:280px;border:1px solid var(--border);border-radius:12px;background:#fff"></iframe>
+      <h3 style="margin:16px 0 6px">Kode</h3>
+      <pre style="padding:15px;background:#10172a;color:#dce5ff;border-radius:12px;overflow:auto;font-size:12px"><code id="upViewCode"></code></pre>
+      <div class="modal-actions">
+        <button class="btn" id="upViewCopy">Salin kode</button>
+        <button class="btn secondary" data-close="uploadViewModal">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /* ============================================================
+       A. DATA MATERI
+       ============================================================ */
+    const lessons = [
+      [1,'Dasar HTML','Pemula','20 menit','Kenali struktur dasar halaman web dan elemen HTML.','HTML menyusun struktur konten halaman web. Browser membaca elemen HTML lalu menampilkannya.',['Elemen ditulis menggunakan tag.','Gunakan head untuk metadata dan body untuk konten.','Atribut memberi informasi tambahan.'],'<!DOCTYPE html>\n<html lang="id">\n<head><meta charset="UTF-8"><title>Halaman Pertama</title></head>\n<body><h1>Halo, dunia!</h1><p>Ini halaman web pertamaku.</p></body>\n</html>','Tag HTML apa untuk judul utama?',['h1','<h1>'],'Elemen h1 biasanya digunakan untuk judul utama.'],
+      [2,'Dasar CSS','Pemula','25 menit','Atur warna, ukuran, jarak, dan tampilan halaman.','CSS mengatur presentasi visual elemen HTML. Aturan CSS terdiri dari selector, properti, dan nilai.',['Selector memilih elemen.','Properti menentukan aspek visual.','Flexbox dan Grid membantu tata letak.'],'body { font-family: Arial,sans-serif; background:#f5f6ff; color:#182033; }\nh1 { color:#625cf5; margin-bottom:12px; }','Properti CSS untuk warna teks?',['color'],'Properti color mengatur warna teks.'],
+      [3,'JavaScript Dasar','Pemula','30 menit','Kenali variabel, fungsi, dan interaksi.','JavaScript membuat halaman web merespons tindakan pengguna dan mengolah data.',['Gunakan const untuk binding yang tidak di-assign ulang.','Fungsi mengemas instruksi.','Event merespons tindakan pengguna.'],'const nama = "Fatir";\nfunction sapa(nama) { return `Halo, ${nama}!`; }\nconsole.log(sapa(nama));','Kata kunci untuk mendeklarasikan variabel konstan?',['const'],'const membuat binding yang tidak dapat di-assign ulang.'],
+      [4,'HTML Semantik','Pemula','20 menit','Susun konten menggunakan elemen bermakna.','HTML semantik menjelaskan peran konten kepada browser, teknologi bantu, dan pengembang.',['Gunakan header untuk kepala halaman.','Main berisi konten utama.','Nav, article, dan footer menjelaskan struktur.'],'<header><h1>Blog Saya</h1></header>\n<nav><a href="#artikel">Artikel</a></nav>\n<main id="artikel"><article><h2>Belajar Web</h2></article></main>\n<footer>Hak cipta 2026</footer>','Elemen untuk konten utama halaman?',['main','<main>'],'Elemen main menandai konten utama halaman.'],
+      [5,'Responsive Design','Pemula','25 menit','Buat tampilan nyaman di ponsel, tablet, dan desktop.','Desain responsif membuat tata letak menyesuaikan ukuran layar.',['Gunakan viewport meta tag.','Pilih Flexbox atau Grid.','Media query menyesuaikan gaya dengan ukuran layar.'],'.cards { display:grid; grid-template-columns:1fr; gap:16px; }\n@media (min-width:700px) { .cards { grid-template-columns:repeat(2,1fr); } }','Fitur CSS berdasarkan ukuran layar?',['media query','@media'],'Media query memungkinkan CSS menyesuaikan kondisi layar.'],
+      [6,'Git dan Version Control','Junior','30 menit','Lacak perubahan kode dan pelajari alur kerja Git.','Git menyimpan riwayat perubahan proyek.',['Repository menyimpan riwayat.','Commit merekam perubahan.','Branch memisahkan pengembangan fitur.'],'git init\ngit add .\ngit commit -m "Menambahkan halaman awal"\ngit switch -c fitur-navbar','Perintah untuk merekam perubahan ke riwayat?',['git commit','commit'],'git commit membuat rekaman perubahan.'],
+      [7,'Array dan Object','Junior','30 menit','Kelola kumpulan data dan struktur objek JavaScript.','Array menyimpan urutan nilai; object menyimpan pasangan key dan value.',['Indeks array mulai dari nol.','map menghasilkan array baru.','Object mengelompokkan properti dan nilai.'],'const buah=["Apel","Jeruk","Mangga"];\nconst besar=buah.map(item=>item.toUpperCase());\nconst pengguna={nama:"Fatir",aktif:true};\nconsole.log(besar,pengguna.nama);','Indeks untuk elemen pertama array?',['0','nol'],'Indeks array JavaScript dimulai dari nol.'],
+      [8,'DOM dan Event','Junior','35 menit','Ubah elemen halaman melalui JavaScript.','DOM adalah representasi dokumen HTML yang dapat dimodifikasi melalui JavaScript.',['querySelector memilih elemen.','textContent mengubah teks.','addEventListener memasang penangan event.'],'const tombol=document.querySelector("#tombol");\nconst judul=document.querySelector("#judul");\ntombol.addEventListener("click",()=>{judul.textContent="Berhasil!";});','Metode untuk memasang penangan event?',['addeventlistener'],'addEventListener memasang callback untuk event.'],
+      [9,'Async JavaScript','Junior','40 menit','Pahami Promise, async/await, dan operasi asinkron.','Operasi asinkron menangani pekerjaan yang membutuhkan waktu tanpa menghentikan seluruh alur.',['Promise merepresentasikan hasil di masa depan.','async membuat fungsi mengembalikan Promise.','await menunggu hasil Promise.'],'async function ambilData(){\n  try {\n    const r=await fetch("/api/data");\n    if(!r.ok) throw Error("Gagal");\n    console.log(await r.json());\n  } catch(e) { console.error(e); }\n}','Kata kunci untuk menunggu Promise dalam fungsi async?',['await'],'await menunggu penyelesaian Promise.'],
+      [10,'TypeScript','Senior','40 menit','Tambahkan tipe agar kode mudah dipelihara.','TypeScript menambahkan sistem tipe pada JavaScript dan memeriksa tipe saat pengembangan.',['Tipe membantu menemukan kesalahan lebih awal.','Interface mendeskripsikan bentuk objek.','TypeScript dikompilasi menjadi JavaScript.'],'interface Pengguna { nama:string; umur:number; }\nfunction sapa(user:Pengguna):string { return `Halo, ${user.nama}`; }\nconst fatir:Pengguna={nama:"Fatir",umur:20};','Tipe TypeScript untuk teks?',['string'],'string adalah tipe untuk data teks.'],
+      [11,'Backend dan API','Senior','45 menit','Kenali server, endpoint, request, dan response.','Backend memproses logika aplikasi dan menyediakan layanan melalui API.',['Endpoint menyediakan jalur operasi.','HTTP method menjelaskan jenis permintaan.','Validasi input penting.'],'app.get("/api/pengguna",(req,res)=>{\n  res.json({data:[{id:1,nama:"Fatir"}]});\n});','Format data yang umum digunakan dalam REST API?',['json'],'JSON umum digunakan untuk pertukaran data API.'],
+      [12,'Testing Aplikasi','Senior','35 menit','Tulis pengujian untuk menjaga perilaku aplikasi.','Testing memastikan kode berperilaku sesuai harapan dan menemukan regresi.',['Unit test menguji unit kecil.','Integration test memeriksa kerja sama bagian.','Hasil tes harus dapat diverifikasi.'],'function tambah(a,b){return a+b;}\nconsole.assert(tambah(2,3)===5);\nconsole.assert(tambah(-1,1)===0);','Tes untuk satu unit kecil kode disebut?',['unit test','unit testing'],'Unit test menguji unit kode secara terisolasi.'],
+      [13,'Keamanan Web','Senior','40 menit','Pelajari validasi, autentikasi, dan keamanan dasar.','Keamanan harus dipikirkan sejak awal pengembangan.',['Validasi input sesuai konteks.','Jangan simpan password sebagai teks biasa.','Gunakan HTTPS dan kontrol akses.'],'function validasiNama(nama){\n  if(typeof nama!=="string") return false;\n  const bersih=nama.trim();\n  return bersih.length>=2 && bersih.length<=60;\n}','Protokol terenkripsi untuk koneksi HTTP?',['https','tls'],'HTTPS menggunakan TLS untuk melindungi koneksi HTTP.'],
+      [14,'Arsitektur Aplikasi','Profesional','50 menit','Atur struktur aplikasi agar mudah dikembangkan.','Arsitektur menjelaskan bagaimana komponen aplikasi dibagi dan berkomunikasi.',['Pisahkan tanggung jawab.','Gunakan batas modul yang jelas.','Pilih kompleksitas sesuai kebutuhan.'],'src/\n  features/users/\n    users.controller.js\n    users.service.js\n    users.repository.js\n  shared/\n  app.js','Prinsip satu modul punya tanggung jawab terfokus?',['single responsibility','separation of concerns','srp'],'Single Responsibility membantu modul tetap fokus.'],
+      [15,'Optimasi Performa','Profesional','45 menit','Tingkatkan kecepatan pemuatan aplikasi.','Optimasi dimulai dari pengukuran, identifikasi bottleneck, lalu perubahan yang diuji.',['Optimalkan gambar dan aset.','Kurangi JavaScript yang tidak diperlukan.','Ukur performa sebelum dan sesudah.'],'<img src="gambar.webp" alt="Ilustrasi" width="800" height="500" loading="lazy">','Atribut untuk pemuatan gambar tertunda?',['loading="lazy"','lazy'],'loading="lazy" meminta browser menunda pemuatan sampai diperlukan.'],
+      [16,'DevOps dan Deployment','Profesional','50 menit','Kenali CI/CD, deployment, dan monitoring.','DevOps menggabungkan pengembangan dan operasi untuk merilis perangkat lunak dengan andal.',['CI menjalankan pemeriksaan otomatis.','CD membantu pengiriman atau deployment.','Monitoring mendeteksi masalah produksi.'],'1. Perubahan dikirim ke repository\n2. Tes otomatis dijalankan\n3. Aplikasi dibangun\n4. Deployment dilakukan\n5. Log dan metrik dipantau','Singkatan CI dalam CI/CD?',['continuous integration'],'CI berarti Continuous Integration.'],
+      [17,'Proyek Akhir Web','Profesional','120 menit','Gabungkan struktur, desain, interaksi, dan penyimpanan.','Proyek akhir menggabungkan konsep menjadi aplikasi yang dapat digunakan.',['Tentukan kebutuhan pengguna.','Rancang antarmuka responsif dan aksesibel.','Uji alur utama sebelum rilis.'],'const checklist=["HTML semantik","Layout responsif","Interaksi JavaScript","Validasi input","Pengujian dasar","Dokumentasi"];\nconsole.log(checklist);','Sebelum implementasi, apa yang perlu ditentukan?',['kebutuhan pengguna','kebutuhan','requirement'],'Kebutuhan pengguna menentukan ruang lingkup dan prioritas proyek.']
+    ].map(x=>({id:x[0],title:x[1],level:x[2],time:x[3],desc:x[4],intro:x[5],points:x[6],code:x[7],question:x[8],answer:x[9],explain:x[10]}));
+
+    /* ============================================================
+       B. STORAGE & UTIL
+       ============================================================ */
+    const K = {
+      done: 'bsm_done_v1',
+      notes: 'bsm_notes_v1',
+      theme: 'bsm_theme_v1',
+      uploads: 'bsm_uploads_v1',
+      ads: 'bsm_ads_v1',
+      music: 'bsm_music_v1',
+      site: 'bsm_site_v2',
+      adminSession: 'bsm_admin_session_v1'
+    };
+
+    const ADMIN = { user: 'Admin114', pass: 'Admin123' };
+
+    const DEFAULT_SITE = {
+      brandName: 'YukBelajar',
+      brandSub: 'FATIR WEB MAKER',
+      heroTitle1: 'Bangun skill web.',
+      heroTitle2: 'Mulai dari nol.',
+      heroDesc: 'Belajar HTML, CSS, JavaScript, sampai konsep pengembangan web tingkat lanjut. Materi bertahap, contoh kode, dan latihan yang bisa langsung dicoba.'
+    };
+
+    function read(k, fallback) {
+      try {
+        const v = localStorage.getItem(k);
+        return v === null ? fallback : JSON.parse(v);
+      } catch { return fallback; }
+    }
+
+    function save(k, v) {
+      try { localStorage.setItem(k, JSON.stringify(v)); }
+      catch { toast('Penyimpanan browser tidak tersedia.'); }
+    }
+
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    function safeUrl(u) {
+      if (!u) return '';
+      const s = String(u).trim();
+      if (/^(javascript|data|vbscript):/i.test(s)) return '#';
+      return s;
+    }
+
+    let done = read(K.done, []);
+    let notes = read(K.notes, []);
+    let level = 'Semua';
+    let current = null;
+    let currentUpload = null;
+    let timer;
+
+    function toast(s) {
+      $('#toast').textContent = s;
+      $('#toast').classList.add('show');
+      clearTimeout(timer);
+      timer = setTimeout(() => $('#toast').classList.remove('show'), 2400);
+    }
+
+    /* ============================================================
+       C. MODAL HELPERS
+       ============================================================ */
+    function openModalById(id) {
+      const m = document.getElementById(id);
+      if (!m) return;
+      m.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModalById(id) {
+      const m = document.getElementById(id);
+      if (!m) return;
+      m.classList.remove('open');
+      if (!document.querySelector('.modal.open')) {
+        document.body.style.overflow = '';
+      }
+    }
+
+    /* ============================================================
+       D. RENDER MATERI
+       ============================================================ */
+    function render() {
+      const q = $('#searchInput').value.toLowerCase().trim();
+      const arr = lessons.filter(l =>
+        (level === 'Semua' || l.level === level) &&
+        (l.title + ' ' + l.desc + ' ' + l.level).toLowerCase().includes(q)
+      );
+
+      $('#lessonGrid').innerHTML = arr.length
+        ? arr.map(l => `
+          <article class="lesson-card">
+            <div class="lesson-icon">&lt;/&gt;</div>
+            <div class="lesson-info">
+              <div class="lesson-title-row">
+                <h3>${esc(l.title)}</h3>
+                <span class="level-tag">${esc(l.level)}</span>
+              </div>
+              <p>${esc(l.desc)}</p>
+            </div>
+            <div class="lesson-action">
+              <span class="lesson-time">${esc(l.time)}${done.includes(l.id) ? ' · Selesai' : ''}</span>
+              <button class="text-link" data-open="${l.id}">
+                ${done.includes(l.id) ? 'Pelajari lagi' : 'Mulai belajar'} →
+              </button>
+            </div>
+          </article>
+        `).join('')
+        : '<div class="empty">Tidak ada materi yang cocok. Coba kata kunci lain.</div>';
+    }
+
+    /* ============================================================
+       E. PROGRES
+       ============================================================ */
+    function progress() {
+      done = done.filter(id => lessons.some(l => l.id === id));
+      save(K.done, done);
+
+      const n = done.length;
+      const p = Math.round(n / lessons.length * 100);
+
+      $('#statLessons').textContent = lessons.length;
+      $('#statDone').textContent = n;
+      $('#progressCount').textContent = `${n} / ${lessons.length}`;
+      $('#progressPercent').textContent = p + '%';
+      $('#progressBar').style.width = p + '%';
+      $('#heroProgress').style.width = p + '%';
+      $('#heroPercent').textContent = p + '%';
+      $('#progressMessage').textContent =
+        n === lessons.length ? 'Hebat! Semua materi selesai.'
+        : n ? `Kamu sudah menyelesaikan ${n} materi. Lanjutkan belajar!`
+        : 'Mulai dari materi pertama untuk membangun kebiasaan belajar.';
+
+      render();
+    }
+
+    /* ============================================================
+       F. MODAL MATERI
+       ============================================================ */
+    function openLesson(id) {
+      current = lessons.find(l => l.id === +id);
+      if (!current) return;
+
+      $('#modalLevel').textContent = current.level.toUpperCase();
+      $('#modalTitle').textContent = current.title;
+      $('#modalMeta').textContent = current.time + ' · ' + (done.includes(current.id) ? 'Sudah selesai' : 'Belum selesai');
+      $('#modalBody').innerHTML = `
+        <p>${esc(current.intro)}</p>
+        <h3>Yang akan kamu pelajari</h3>
+        <ul>${current.points.map(p => '<li>' + esc(p) + '</li>').join('')}</ul>
+        <h3>Contoh kode</h3>
+        <pre><code>${esc(current.code)}</code></pre>
+        <h3>Uji pemahaman</h3>
+        <p>${esc(current.question)}</p>
+        <div class="field">
+          <label for="answerInput">Jawaban kamu</label>
+          <input id="answerInput" placeholder="Ketik jawaban di sini">
+        </div>
+        <button class="btn secondary small" id="checkAnswer">Periksa jawaban</button>
+        <p id="answerFeedback" role="status"></p>
+      `;
+      $('#completeLesson').textContent = done.includes(current.id) ? 'Batalkan selesai' : 'Tandai selesai';
+      openModalById('lessonModal');
+    }
+
+    function closeLesson() {
+      closeModalById('lessonModal');
+      current = null;
+    }
+
+    /* ============================================================
+       G. EVENT MATERI
+       ============================================================ */
+    $('#lessonGrid').addEventListener('click', e => {
+      const b = e.target.closest('[data-open]');
+      if (b) openLesson(b.dataset.open);
+    });
+
+    $('#filters').addEventListener('click', e => {
+      const b = e.target.closest('[data-level]');
+      if (!b) return;
+      level = b.dataset.level;
+      $$('.filter').forEach(x => x.classList.toggle('active', x === b));
+      render();
+    });
+
+    $('#searchInput').addEventListener('input', render);
+
+    $('#completeLesson').addEventListener('click', () => {
+      if (!current) return;
+      if (done.includes(current.id)) done = done.filter(x => x !== current.id);
+      else done.push(current.id);
+      progress();
+      $('#modalMeta').textContent = current.time + ' · ' + (done.includes(current.id) ? 'Sudah selesai' : 'Belum selesai');
+      $('#completeLesson').textContent = done.includes(current.id) ? 'Batalkan selesai' : 'Tandai selesai';
+      toast('Progres diperbarui.');
+    });
+
+    $('#modalBody').addEventListener('click', e => {
+      if (e.target.id !== 'checkAnswer' || !current) return;
+      const a = $('#answerInput').value.trim().toLowerCase();
+      const ok = current.answer.some(x =>
+        a === x.toLowerCase() ||
+        a.replace(/[<>]/g, '') === x.toLowerCase().replace(/[<>]/g, '')
+      );
+      $('#answerFeedback').textContent = (ok ? 'Benar! ' : 'Belum tepat. ') + current.explain;
+      $('#answerFeedback').style.color = ok ? 'var(--green)' : '#d58a36';
+    });
+
+    /* ============================================================
+       H. COPY
+       ============================================================ */
+    async function copy(t) {
+      try {
+        await navigator.clipboard.writeText(t);
+        toast('Kode berhasil disalin.');
+      } catch {
+        const a = document.createElement('textarea');
+        a.value = t;
+        document.body.appendChild(a);
+        a.select();
+        const ok = document.execCommand('copy');
+        a.remove();
+        toast(ok ? 'Kode berhasil disalin.' : 'Salin kode secara manual.');
+      }
+    }
+
+    $('#copyLessonCode').addEventListener('click', () => current && copy(current.code));
+
+    $('#resetProgress').addEventListener('click', () => {
+      if (confirm('Yakin ingin mereset semua progres belajar?')) {
+        done = [];
+        progress();
+        toast('Progres direset.');
+      }
+    });
+
+    /* ============================================================
+       I. CATATAN
+       ============================================================ */
+    function renderNotes() {
+      $('#noteCount').textContent = notes.length
+        ? notes.length + ' catatan tersimpan.'
+        : 'Belum ada catatan.';
+
+      $('#noteList').innerHTML = notes.length
+        ? notes.map(n => `
+          <div class="note-item">
+            <button data-delete="${esc(n.id)}">Hapus</button>
+            <strong>${esc(n.title)}</strong>
+            <div style="white-space:pre-wrap;margin-top:5px;color:var(--muted)">${esc(n.text)}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:7px">${esc(n.date)}</div>
+          </div>
+        `).join('')
+        : '<p style="font-size:12px;color:var(--muted)">Catatan tersimpan akan muncul di sini.</p>';
+    }
+
+    $('#saveNote').addEventListener('click', () => {
+      const title = $('#noteTitle').value.trim();
+      const text = $('#noteText').value.trim();
+      if (!title || !text) return toast('Isi judul dan catatan terlebih dahulu.');
+
+      notes.unshift({
+        id: String(Date.now()) + Math.random(),
+        title, text,
+        date: new Date().toLocaleDateString('id-ID')
+      });
+      save(K.notes, notes);
+      $('#noteTitle').value = '';
+      $('#noteText').value = '';
+      renderNotes();
+      toast('Catatan disimpan.');
+    });
+
+    $('#noteList').addEventListener('click', e => {
+      const b = e.target.closest('[data-delete]');
+      if (!b) return;
+      notes = notes.filter(n => n.id !== b.dataset.delete);
+      save(K.notes, notes);
+      renderNotes();
+      toast('Catatan dihapus.');
+    });
+
+    /* ============================================================
+       J. PLAYGROUND
+       ============================================================ */
+    function run() {
+      $('#preview').srcdoc = $('#playCode').value;
+    }
+    $('#runCode').addEventListener('click', run);
+
+    /* ============================================================
+       K. MENU MOBILE
+       ============================================================ */
+    $('#menuBtn').addEventListener('click', () => {
+      const open = $('#mobileMenu').classList.toggle('open');
+      $('#menuBtn').setAttribute('aria-expanded', String(open));
+    });
+
+    $$('#mobileMenu a').forEach(a => a.addEventListener('click', e => {
+      $('#mobileMenu').classList.remove('open');
+      $('#menuBtn').setAttribute('aria-expanded', 'false');
+      if (a.id === 'mobileAdminBtn') {
+        e.preventDefault();
+        handleAdminClick();
+      }
+    }));
+
+    window.addEventListener('resize', () => {
+      if (innerWidth > 700) $('#mobileMenu').classList.remove('open');
+    });
+
+    /* ============================================================
+       L. TEMA
+       ============================================================ */
+    function theme(t) {
+      document.body.classList.toggle('dark', t === 'dark');
+      $('#themeIcon').innerHTML = t === 'dark'
+        ? '<path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/>'
+        : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5M5 19l1.5-1.5"/>';
+    }
+
+    let t = read(K.theme, 'light');
+    theme(t);
+
+    $('#themeBtn').addEventListener('click', () => {
+      t = t === 'dark' ? 'light' : 'dark';
+      save(K.theme, t);
+      theme(t);
+      toast(t === 'dark' ? 'Mode gelap aktif.' : 'Mode terang aktif.');
+    });
+
+    /* ============================================================
+       M. LAPORAN
+       ============================================================ */
+    $('#reportForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const type = $('#reportType').value;
+      const email = $('#reportEmail').value.trim();
+      const msg = $('#reportMessage').value.trim();
+      if (!msg) return;
+
+      location.href = 'mailto:kaiilin48@gmail.com'
+        + '?subject=' + encodeURIComponent('[YukBelajar] ' + type)
+        + '&body=' + encodeURIComponent(
+            'Jenis: ' + type + '\nEmail pelapor: ' + (email || 'Tidak disertakan') + '\n\nDetail:\n' + msg
+          );
+      toast('Membuka aplikasi email.');
+    });
+
+    /* ============================================================
+       N. SITE SETTINGS
+       ============================================================ */
+    function applySite() {
+      const s = read(K.site, DEFAULT_SITE);
+      $$('.brand-name').forEach(el => el.textContent = s.brandName);
+      $$('.brand-sub').forEach(el => el.textContent = s.brandSub);
+      $('#heroTitle1').textContent = s.heroTitle1;
+      $('#heroTitle2').textContent = s.heroTitle2;
+      $('#heroDesc').textContent = s.heroDesc;
+    }
+
+    /* ============================================================
+       O. IKLAN (7 slot)
+       ============================================================ */
+    function renderAds() {
+      const ads = read(K.ads, []);
+      const slots = {
+        'atas': 'adsTop',
+        'after-materi': 'adsAfterMateri',
+        'tengah': 'adsMid',
+        'after-kreasi': 'adsAfterKreasi',
+        'after-playground': 'adsAfterPlayground',
+        'after-catatan': 'adsAfterCatatan',
+        'bawah': 'adsBottom'
+      };
+
+      Object.entries(slots).forEach(([slot, id]) => {
+        const slotEl = document.getElementById(id);
+        if (!slotEl) return;
+        const section = slotEl.closest('.ad-section');
+        slotEl.innerHTML = '';
+        const filtered = ads.filter(a => a.active && a.slot === slot);
+
+        if (filtered.length === 0) {
+          if (section) section.style.display = 'none';
+          return;
+        }
+        if (section) section.style.display = '';
+
+        filtered.forEach(a => {
+          const div = document.createElement('div');
+          div.className = 'ad-banner ad-slot-' + slot;
+          const link = safeUrl(a.link);
+          div.innerHTML = `
+            <span class="ad-label">IKLAN</span>
+            <div class="ad-body">
+              <h4>${esc(a.title)}</h4>
+              ${a.desc ? `<p>${esc(a.desc)}</p>` : ''}
+            </div>
+            ${link && link !== '#' ? `<a class="btn small ad-cta" href="${esc(link)}" target="_blank" rel="noopener">${esc(a.cta || 'Kunjungi')}</a>` : ''}
+          `;
+          slotEl.appendChild(div);
+        });
+      });
+
+      updateAdminStats();
+    }
+
+    /* ============================================================
+       P. KREASI
+       ============================================================ */
+    function renderUploads() {
+      const uploads = read(K.uploads, []);
+      const list = $('#uploadList');
+
+      $('#uploadCount').textContent = uploads.length
+        ? uploads.length + ' kreasi dibagikan.'
+        : 'Belum ada kreasi.';
+
+      list.innerHTML = uploads.length
+        ? uploads.map(u => `
+          <div class="upload-card">
+            <h4>${esc(u.title)}</h4>
+            <div class="upload-meta">oleh ${esc(u.author)} · ${esc(u.date)}</div>
+            <p class="upload-desc">${esc(u.desc)}</p>
+            <div class="upload-actions">
+              <button class="btn secondary small" data-view-upload="${esc(u.id)}">Lihat & coba</button>
+              <button class="btn secondary small" data-copy-upload="${esc(u.id)}">Salin kode</button>
+            </div>
+          </div>
+        `).join('')
+        : '<p style="font-size:12px;color:var(--muted)">Jadilah yang pertama membagikan kreasi!</p>';
+
+      updateAdminStats();
+    }
+
+    $('#uploadForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const title = $('#upTitle').value.trim();
+      const author = $('#upAuthor').value.trim();
+      const desc = $('#upDesc').value.trim();
+      const code = $('#upCode').value.trim();
+      if (!title || !author || !desc || !code) return toast('Lengkapi semua field.');
+
+      const uploads = read(K.uploads, []);
+      uploads.unshift({
+        id: 'up_' + Date.now() + Math.random().toString(36).slice(2, 7),
+        title, author, desc, code,
+        date: new Date().toLocaleDateString('id-ID')
+      });
+      save(K.uploads, uploads);
+      e.target.reset();
+      renderUploads();
+      toast('Kreasi berhasil dibagikan!');
+    });
+
+    $('#uploadList').addEventListener('click', e => {
+      const view = e.target.closest('[data-view-upload]');
+      const cp = e.target.closest('[data-copy-upload]');
+      if (view) {
+        const uploads = read(K.uploads, []);
+        const u = uploads.find(x => x.id === view.dataset.viewUpload);
+        if (!u) return;
+        currentUpload = u;
+        $('#upViewAuthor').textContent = 'oleh ' + u.author;
+        $('#upViewTitle').textContent = u.title;
+        $('#upViewDesc').textContent = u.desc;
+        $('#upViewPreview').srcdoc = u.code;
+        $('#upViewCode').textContent = u.code;
+        openModalById('uploadViewModal');
+      } else if (cp) {
+        const uploads = read(K.uploads, []);
+        const u = uploads.find(x => x.id === cp.dataset.copyUpload);
+        if (u) copy(u.code);
+      }
+    });
+
+    $('#upViewCopy').addEventListener('click', () => {
+      if (currentUpload) copy(currentUpload.code);
+    });
+
+    /* ============================================================
+       Q. MUSIC PARSERS (diperbarui)
+       ============================================================ */
+    function parseYouTubeId(input) {
+      if (!input) return null;
+      const s = String(input).trim();
+
+      // ID polos (11 karakter)
+      if (/^[a-zA-Z0-9_-]{11}$/.test(s)) return s;
+
+      // Coba pakai URLSearchParams untuk ambil ?v=
+      try {
+        const url = new URL(s);
+        const v = url.searchParams.get('v');
+        if (v && /^[a-zA-Z0-9_-]{11}$/.test(v)) return v;
+      } catch (e) { /* bukan URL lengkap */ }
+
+      // Pola regex cadangan
+      const patterns = [
+        /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+        /[?&]v=([a-zA-Z0-9_-]{11})/,
+        /\/embed\/([a-zA-Z0-9_-]{11})/,
+        /\/shorts\/([a-zA-Z0-9_-]{11})/,
+        /\/live\/([a-zA-Z0-9_-]{11})/
+      ];
+
+      for (const re of patterns) {
+        const m = s.match(re);
+        if (m) return m[1];
+      }
+      return null;
+    }
+
+    function parseSpotify(input) {
+      if (!input) return null;
+      const s = String(input).trim();
+      if (/^[a-zA-Z0-9]{22}$/.test(s)) return { type: 'track', id: s };
+      let m = s.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|artist|episode)\/([a-zA-Z0-9]+)/);
+      if (m) return { type: m[1], id: m[2] };
+      m = s.match(/spotify:(track|album|playlist|artist|episode):([a-zA-Z0-9]+)/);
+      if (m) return { type: m[1], id: m[2] };
+      return null;
+    }
+
+    function parseMp3(input) {
+      if (!input) return null;
+      const s = String(input).trim();
+      if (/^https?:\/\//i.test(s)) return s;
+      return null;
+    }
+
+    /* ============================================================
+       R. MUSIC PLAYER (diperbaiki untuk YouTube)
+       ============================================================ */
+    let musicIndex = 0;
+
+    function getActiveMusic() {
+      return read(K.music, []).filter(m => m.active);
+    }
+
+    function renderMusicPlayer() {
+      const tracks = getActiveMusic();
+      const player = document.getElementById('musicPlayer');
+      if (!player) return;
+
+      if (!tracks.length) { player.hidden = true; return; }
+      player.hidden = false;
+
+      if (musicIndex >= tracks.length) musicIndex = 0;
+      if (musicIndex < 0) musicIndex = tracks.length - 1;
+
+      const track = tracks[musicIndex];
+      document.getElementById('mpTitle').textContent = track.title || 'Musik';
+      document.getElementById('mpCounter').textContent = `${musicIndex + 1} / ${tracks.length}`;
+
+      const trackEl = document.getElementById('mpTrack');
+      trackEl.innerHTML = '';
+
+      // Deteksi protokol & origin
+      const protocol = location.protocol;
+      const isFile = protocol === 'file:';
+      const origin = (protocol === 'http:' || protocol === 'https:') ? location.origin : '';
+
+      if (track.type === 'youtube') {
+        const params = new URLSearchParams({
+          rel: '0',
+          modestbranding: '1',
+          playsinline: '1'
+        });
+        if (origin) params.set('origin', origin);
+
+        const iframe = document.createElement('iframe');
+        // Pakai youtube-nocookie.com — lebih permisif untuk embed
+        iframe.src = `https://www.youtube-nocookie.com/embed/${track.videoId}?${params.toString()}`;
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.title = track.title || 'YouTube';
+        iframe.loading = 'lazy';
+        trackEl.appendChild(iframe);
+
+        // Fallback jika embed gagal
+        const fallback = document.createElement('div');
+        fallback.className = 'mp-fallback';
+        fallback.innerHTML = `
+          ${isFile ? `<p class="mp-warning">⚠️ Halaman dibuka via <code>file://</code>. YouTube embed sering gagal karena referrer kosong. Jalankan lewat server lokal (mis. <code>python -m http.server</code>) atau hosting.</p>` : ''}
+          <a href="https://www.youtube.com/watch?v=${track.videoId}" target="_blank" rel="noopener">▶ Buka di YouTube</a>
+          <button type="button" data-reload-music>↻ Muat ulang</button>
+        `;
+        trackEl.appendChild(fallback);
+
+        fallback.querySelector('[data-reload-music]')?.addEventListener('click', () => {
+          renderMusicPlayer();
+        });
+
+      } else if (track.type === 'spotify') {
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://open.spotify.com/embed/${track.spotifyType || 'track'}/${track.spotifyId}?utm_source=generator`;
+        iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+        iframe.loading = 'lazy';
+        iframe.title = track.title || 'Spotify';
+        iframe.style.height = '152px';
+        trackEl.appendChild(iframe);
+
+        const fallback = document.createElement('div');
+        fallback.className = 'mp-fallback';
+        fallback.innerHTML = `
+          <a href="https://open.spotify.com/${track.spotifyType || 'track'}/${track.spotifyId}" target="_blank" rel="noopener">🎵 Buka di Spotify</a>
+        `;
+        trackEl.appendChild(fallback);
+
+      } else if (track.type === 'mp3') {
+        const audio = document.createElement('audio');
+        audio.controls = true;
+        audio.src = track.src;
+        audio.style.width = '100%';
+        trackEl.appendChild(audio);
+      }
+
+      // Kontrol prev/next
+      const prevBtn = document.getElementById('mpPrev');
+      const nextBtn = document.getElementById('mpNext');
+      if (prevBtn && nextBtn) {
+        const disabled = tracks.length <= 1;
+        prevBtn.disabled = disabled;
+        nextBtn.disabled = disabled;
+        prevBtn.style.opacity = disabled ? 0.4 : 1;
+        nextBtn.style.opacity = disabled ? 0.4 : 1;
+        prevBtn.style.cursor = disabled ? 'not-allowed' : 'pointer';
+        nextBtn.style.cursor = disabled ? 'not-allowed' : 'pointer';
+      }
+
+      updateAdminStats();
+    }
+
+    document.getElementById('mpPrev')?.addEventListener('click', () => {
+      if (getActiveMusic().length <= 1) return;
+      musicIndex--;
+      renderMusicPlayer();
+    });
+
+    document.getElementById('mpNext')?.addEventListener('click', () => {
+      if (getActiveMusic().length <= 1) return;
+      musicIndex++;
+      renderMusicPlayer();
+    });
+
+    document.getElementById('mpToggle')?.addEventListener('click', () => {
+      const player = document.getElementById('musicPlayer');
+      player.classList.toggle('minimized');
+      document.getElementById('mpToggle').textContent = player.classList.contains('minimized') ? '+' : '−';
+    });
+
+    function renderAdminMusic() {
+      const tracks = read(K.music, []);
+      const el = document.getElementById('adminMusicList');
+      if (!el) return;
+      if (!tracks.length) {
+        el.innerHTML = '<p class="admin-empty">Belum ada musik.</p>';
+        return;
+      }
+      el.innerHTML = tracks.map(m => `
+        <div class="admin-row">
+          <div>
+            <strong>${esc(m.title || 'Tanpa judul')}</strong>
+            <div class="small-muted">${m.type.toUpperCase()}${m.active ? '' : ' · nonaktif'}</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn secondary small" data-toggle-music="${esc(m.id)}">${m.active ? 'Nonaktifkan' : 'Aktifkan'}</button>
+            <button class="btn secondary small" data-delete-music="${esc(m.id)}" style="color:var(--danger)">Hapus</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('musicForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      const type = document.getElementById('musicType').value;
+      const input = document.getElementById('musicInput').value.trim();
+      const title = document.getElementById('musicTitle').value.trim() || 'Musik';
+
+      if (!input) return toast('Isi URL atau ID.');
+
+      const track = {
+        id: 'mu_' + Date.now() + Math.random().toString(36).slice(2, 6),
+        type, title, active: true
+      };
+
+      if (type === 'youtube') {
+        const vid = parseYouTubeId(input);
+        if (!vid) return toast('ID video YouTube tidak valid.');
+        track.videoId = vid;
+      } else if (type === 'spotify') {
+        const sp = parseSpotify(input);
+        if (!sp) return toast('URL Spotify tidak valid.');
+        track.spotifyType = sp.type;
+        track.spotifyId = sp.id;
+      } else if (type === 'mp3') {
+        const src = parseMp3(input);
+        if (!src) return toast('URL MP3 tidak valid.');
+        track.src = src;
+      }
+
+      const tracks = read(K.music, []);
+      tracks.unshift(track);
+      save(K.music, tracks);
+      e.target.reset();
+      renderAdminMusic();
+      renderMusicPlayer();
+      toast('Musik ditambahkan.');
+    });
+
+    document.getElementById('adminMusicList')?.addEventListener('click', e => {
+      const toggle = e.target.closest('[data-toggle-music]');
+      const del = e.target.closest('[data-delete-music]');
+      if (toggle) {
+        const tracks = read(K.music, []);
+        const m = tracks.find(x => x.id === toggle.dataset.toggleMusic);
+        if (m) { m.active = !m.active; save(K.music, tracks); }
+        renderAdminMusic();
+        renderMusicPlayer();
+        toast('Status musik diperbarui.');
+      } else if (del) {
+        if (!confirm('Hapus musik ini?')) return;
+        let tracks = read(K.music, []);
+        tracks = tracks.filter(x => x.id !== del.dataset.deleteMusic);
+        save(K.music, tracks);
+        renderAdminMusic();
+        renderMusicPlayer();
+        toast('Musik dihapus.');
+      }
+    });
+
+    /* ============================================================
+       S. ADMIN AUTH
+       ============================================================ */
+    function isAdmin() {
+      return sessionStorage.getItem(K.adminSession) === '1';
+    }
+
+    function setAdmin(v) {
+      if (v) sessionStorage.setItem(K.adminSession, '1');
+      else sessionStorage.removeItem(K.adminSession);
+    }
+
+    function updateAdminUI() {
+      const label = isAdmin() ? 'Admin Panel' : 'Login Admin';
+      const navBtn = $('#adminBtn');
+      const navText = $('#adminBtnText');
+      if (navText) navText.textContent = label;
+      if (navBtn) {
+        navBtn.title = label;
+        navBtn.setAttribute('aria-label', label);
+        navBtn.classList.toggle('secondary', !isAdmin());
+        navBtn.classList.toggle('admin-active', isAdmin());
+      }
+      const mobileBtn = $('#mobileAdminBtn');
+      if (mobileBtn) mobileBtn.textContent = isAdmin() ? 'Admin Panel' : 'Login Admin';
+    }
+
+    function handleAdminClick() {
+      if (isAdmin()) {
+        openAdminPanel();
+      } else {
+        $('#adminLoginForm').reset();
+        $('#adminLoginMsg').textContent = '';
+        openModalById('adminLoginModal');
+      }
+    }
+
+    $('#adminBtn').addEventListener('click', handleAdminClick);
+
+    $('#adminLoginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const u = $('#adminUser').value.trim();
+      const p = $('#adminPass').value;
+      if (u === ADMIN.user && p === ADMIN.pass) {
+        setAdmin(true);
+        closeModalById('adminLoginModal');
+        updateAdminUI();
+        toast('Login berhasil. Selamat datang, Admin!');
+        openAdminPanel();
+      } else {
+        $('#adminLoginMsg').textContent = 'Username atau password salah.';
+      }
+    });
+
+    $('#adminLogout').addEventListener('click', () => {
+      setAdmin(false);
+      updateAdminUI();
+      closeModalById('adminPanelModal');
+      toast('Berhasil logout.');
+    });
+
+    /* ============================================================
+       T. ADMIN PANEL
+       ============================================================ */
+    function openAdminPanel() {
+      if (!isAdmin()) return;
+      $('#adminWelcome').textContent = 'Login sebagai ' + ADMIN.user + '. Kelola situs di sini.';
+      renderAdminAds();
+      renderAdminUploads();
+      renderAdminMusic();
+      renderSiteForm();
+      updateAdminStats();
+      openModalById('adminPanelModal');
+    }
+
+    function updateAdminStats() {
+      const uploads = read(K.uploads, []);
+      const ads = read(K.ads, []);
+      const music = read(K.music, []);
+      $('#adminStatUploads').textContent = uploads.length;
+      $('#adminStatAds').textContent = ads.filter(a => a.active).length;
+      $('#adminStatMusic').textContent = music.filter(m => m.active).length;
+      $('#adminStatNotes').textContent = notes.length;
+      $('#adminStatDone').textContent = done.length;
+    }
+
+    function renderAdminAds() {
+      const ads = read(K.ads, []);
+      const el = $('#adminAdsList');
+      if (!ads.length) {
+        el.innerHTML = '<p class="admin-empty">Belum ada iklan.</p>';
+        return;
+      }
+      el.innerHTML = ads.map(a => `
+        <div class="admin-row">
+          <div>
+            <strong>${esc(a.title)}</strong>
+            <div class="small-muted">Posisi: ${esc(a.slot)}${a.desc ? ' · ' + esc(a.desc) : ''}${a.active ? '' : ' · (nonaktif)'}</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn secondary small" data-toggle-ad="${esc(a.id)}">${a.active ? 'Nonaktifkan' : 'Aktifkan'}</button>
+            <button class="btn secondary small" data-delete-ad="${esc(a.id)}" style="color:var(--danger)">Hapus</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAdminUploads() {
+      const uploads = read(K.uploads, []);
+      const el = $('#adminUploadsList');
+      if (!uploads.length) {
+        el.innerHTML = '<p class="admin-empty">Belum ada kreasi yang dibagikan.</p>';
+        return;
+      }
+      el.innerHTML = uploads.map(u => `
+        <div class="admin-row">
+          <div>
+            <strong>${esc(u.title)}</strong>
+            <div class="small-muted">oleh ${esc(u.author)} · ${esc(u.date)}</div>
+          </div>
+          <button class="btn secondary small" data-delete-upload="${esc(u.id)}" style="color:var(--danger)">Hapus</button>
+        </div>
+      `).join('');
+    }
+
+    function renderSiteForm() {
+      const s = read(K.site, DEFAULT_SITE);
+      $('#siteName').value = s.brandName;
+      $('#siteSub').value = s.brandSub;
+      $('#siteHero1').value = s.heroTitle1;
+      $('#siteHero2').value = s.heroTitle2;
+      $('#siteHeroDesc').value = s.heroDesc;
+    }
+
+    $$('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        $$('.admin-tab').forEach(t => t.classList.remove('active'));
+        $$('.admin-tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        const id = 'tab' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1);
+        const target = document.getElementById(id);
+        if (target) target.classList.add('active');
+      });
+    });
+
+    $('#adForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const title = $('#adTitle').value.trim();
+      if (!title) return toast('Judul iklan wajib diisi.');
+
+      const ads = read(K.ads, []);
+      ads.unshift({
+        id: 'ad_' + Date.now() + Math.random().toString(36).slice(2, 6),
+        title,
+        desc: $('#adDesc').value.trim(),
+        link: $('#adLink').value.trim(),
+        cta: $('#adCta').value.trim() || 'Kunjungi',
+        slot: $('#adSlot').value,
+        active: true
+      });
+      save(K.ads, ads);
+      e.target.reset();
+      $('#adCta').value = 'Kunjungi';
+      renderAdminAds();
+      renderAds();
+      toast('Iklan ditambahkan.');
+    });
+
+    $('#adminAdsList').addEventListener('click', e => {
+      const toggle = e.target.closest('[data-toggle-ad]');
+      const del = e.target.closest('[data-delete-ad]');
+      if (toggle) {
+        const ads = read(K.ads, []);
+        const a = ads.find(x => x.id === toggle.dataset.toggleAd);
+        if (a) { a.active = !a.active; save(K.ads, ads); }
+        renderAdminAds();
+        renderAds();
+        toast('Status iklan diperbarui.');
+      } else if (del) {
+        if (!confirm('Hapus iklan ini?')) return;
+        let ads = read(K.ads, []);
+        ads = ads.filter(x => x.id !== del.dataset.deleteAd);
+        save(K.ads, ads);
+        renderAdminAds();
+        renderAds();
+        toast('Iklan dihapus.');
+      }
+    });
+
+    $('#adminUploadsList').addEventListener('click', e => {
+      const del = e.target.closest('[data-delete-upload]');
+      if (!del) return;
+      if (!confirm('Hapus kreasi ini?')) return;
+      let uploads = read(K.uploads, []);
+      uploads = uploads.filter(x => x.id !== del.dataset.deleteUpload);
+      save(K.uploads, uploads);
+      renderAdminUploads();
+      renderUploads();
+      toast('Kreasi dihapus.');
+    });
+
+    $('#siteForm').addEventListener('submit', e => {
+      e.preventDefault();
+      save(K.site, {
+        brandName: $('#siteName').value.trim() || DEFAULT_SITE.brandName,
+        brandSub: $('#siteSub').value.trim() || DEFAULT_SITE.brandSub,
+        heroTitle1: $('#siteHero1').value.trim() || DEFAULT_SITE.heroTitle1,
+        heroTitle2: $('#siteHero2').value.trim() || DEFAULT_SITE.heroTitle2,
+        heroDesc: $('#siteHeroDesc').value.trim() || DEFAULT_SITE.heroDesc
+      });
+      applySite();
+      toast('Pengaturan situs disimpan.');
+    });
+
+    $$('[data-reset]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.reset;
+        if (!confirm('Yakin ingin melanjutkan?')) return;
+
+        if (key === 'uploads') {
+          save(K.uploads, []);
+          renderUploads();
+          renderAdminUploads();
+        } else if (key === 'ads') {
+          save(K.ads, []);
+          renderAds();
+          renderAdminAds();
+        } else if (key === 'music') {
+          save(K.music, []);
+          musicIndex = 0;
+          renderAdminMusic();
+          renderMusicPlayer();
+        } else if (key === 'notes') {
+          notes = [];
+          save(K.notes, notes);
+          renderNotes();
+        } else if (key === 'progress') {
+          done = [];
+          progress();
+        } else if (key === 'all') {
+          [K.done, K.notes, K.uploads, K.ads, K.music, K.site].forEach(k => localStorage.removeItem(k));
+          done = []; notes = [];
+          progress(); renderNotes(); renderUploads(); renderAds(); renderAdminMusic(); renderMusicPlayer(); applySite();
+        }
+        updateAdminStats();
+        toast('Data direset.');
+      });
+    });
+
+    /* ============================================================
+       U. CLOSE HANDLERS
+       ============================================================ */
+    $$('[data-close]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.close;
+        if (id === 'lessonModal') closeLesson();
+        else closeModalById(id);
+      });
+    });
+
+    ['adminLoginModal', 'adminPanelModal', 'uploadViewModal'].forEach(id => {
+      const m = document.getElementById(id);
+      if (m) m.addEventListener('click', e => {
+        if (e.target === m) closeModalById(id);
+      });
+    });
+
+    $('#lessonModal').addEventListener('click', e => {
+      if (e.target === $('#lessonModal')) closeLesson();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      if ($('#lessonModal').classList.contains('open')) closeLesson();
+      ['adminLoginModal', 'adminPanelModal', 'uploadViewModal'].forEach(id => {
+        if (document.getElementById(id)?.classList.contains('open')) closeModalById(id);
+      });
+    });
+
+    /* ============================================================
+       V. INIT
+       ============================================================ */
+    $('#year').textContent = new Date().getFullYear();
+    applySite();
+    renderAds();
+    renderUploads();
+    renderMusicPlayer();
+    progress();
+    renderNotes();
+    run();
+    updateAdminUI();
+  </script>
+</body>
+</html>
